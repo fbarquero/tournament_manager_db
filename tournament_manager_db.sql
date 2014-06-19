@@ -36,6 +36,30 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
+-- Table `tournament_manager_db`.`weight_category`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `tournament_manager_db`.`weight_category` ;
+
+CREATE TABLE IF NOT EXISTS `tournament_manager_db`.`weight_category` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `name` VARCHAR(45) NULL,
+  PRIMARY KEY (`id`))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `tournament_manager_db`.`age_category`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `tournament_manager_db`.`age_category` ;
+
+CREATE TABLE IF NOT EXISTS `tournament_manager_db`.`age_category` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `name` VARCHAR(45) NULL,
+  PRIMARY KEY (`id`))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
 -- Table `tournament_manager_db`.`fighter`
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS `tournament_manager_db`.`fighter` ;
@@ -49,10 +73,14 @@ CREATE TABLE IF NOT EXISTS `tournament_manager_db`.`fighter` (
   `elite` BIT NOT NULL,
   `belt_belt_id` INT NOT NULL,
   `academy_academy_id` INT NOT NULL,
-  PRIMARY KEY (`id`),
+  `weight_category_id` INT NOT NULL,
+  `age_category_id` INT NOT NULL,
+  PRIMARY KEY (`id`, `weight_category_id`, `age_category_id`),
   UNIQUE INDEX `name_UNIQUE` (`name` ASC),
   INDEX `fk_fighter_belt1_idx` (`belt_belt_id` ASC),
   INDEX `fk_fighter_academy1_idx` (`academy_academy_id` ASC),
+  INDEX `fk_fighter_weight_category1_idx` (`weight_category_id` ASC),
+  INDEX `fk_fighter_age_category1_idx` (`age_category_id` ASC),
   CONSTRAINT `fk_fighter_belt1`
     FOREIGN KEY (`belt_belt_id`)
     REFERENCES `tournament_manager_db`.`belt` (`id`)
@@ -61,6 +89,16 @@ CREATE TABLE IF NOT EXISTS `tournament_manager_db`.`fighter` (
   CONSTRAINT `fk_fighter_academy1`
     FOREIGN KEY (`academy_academy_id`)
     REFERENCES `tournament_manager_db`.`academy` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_fighter_weight_category1`
+    FOREIGN KEY (`weight_category_id`)
+    REFERENCES `tournament_manager_db`.`weight_category` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_fighter_age_category1`
+    FOREIGN KEY (`age_category_id`)
+    REFERENCES `tournament_manager_db`.`age_category` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
@@ -129,11 +167,3 @@ ENGINE = InnoDB;
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
-
-
-INSERT INTO belt (description) values ('Blanco');
-INSERT INTO belt (description) values ('Amarillo');
-INSERT INTO belt (description) values ('Verde');
-INSERT INTO belt (description) values ('Azul');
-INSERT INTO belt (description) values ('Rojo');
-INSERT INTO belt (description) values ('Negro');
