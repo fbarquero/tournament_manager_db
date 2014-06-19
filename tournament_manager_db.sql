@@ -125,15 +125,34 @@ DROP TABLE IF EXISTS `tournament_manager_db`.`bracket` ;
 CREATE TABLE IF NOT EXISTS `tournament_manager_db`.`bracket` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `json` TEXT NOT NULL,
-  `weight` VARCHAR(4) NULL,
-  `gender` CHAR NULL,
-  `belt` VARCHAR(12) NULL,
   `tournament_id` INT NOT NULL,
-  PRIMARY KEY (`id`),
+  `weight_category_id` INT NOT NULL,
+  `age_category_id` INT NOT NULL,
+  `belt_id` INT NOT NULL,
+  `gender` CHAR NOT NULL,
+  PRIMARY KEY (`id`, `weight_category_id`, `age_category_id`, `belt_id`),
   INDEX `fk_bracket_tournament1_idx` (`tournament_id` ASC),
+  INDEX `fk_bracket_weight_category1_idx` (`weight_category_id` ASC),
+  INDEX `fk_bracket_age_category1_idx` (`age_category_id` ASC),
+  INDEX `fk_bracket_belt1_idx` (`belt_id` ASC),
   CONSTRAINT `fk_bracket_tournament1`
     FOREIGN KEY (`tournament_id`)
     REFERENCES `tournament_manager_db`.`tournament` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_bracket_weight_category1`
+    FOREIGN KEY (`weight_category_id`)
+    REFERENCES `tournament_manager_db`.`weight_category` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_bracket_age_category1`
+    FOREIGN KEY (`age_category_id`)
+    REFERENCES `tournament_manager_db`.`age_category` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_bracket_belt1`
+    FOREIGN KEY (`belt_id`)
+    REFERENCES `tournament_manager_db`.`belt` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
@@ -167,3 +186,48 @@ ENGINE = InnoDB;
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
+
+-- Belt info --
+INSERT INTO belt (description) values ('Blanco');
+INSERT INTO belt (description) values ('Amarillo');
+INSERT INTO belt (description) values ('Verde');
+INSERT INTO belt (description) values ('Azul');
+INSERT INTO belt (description) values ('Rojo');
+INSERT INTO belt (description) values ('Negro');
+
+-- weight_category info --
+INSERT INTO weight_category (name) values ('Fin');
+INSERT INTO weight_category (name) values ('Fly');
+INSERT INTO weight_category (name) values ('Bantam');
+INSERT INTO weight_category (name) values ('Feather');
+INSERT INTO weight_category (name) values ('Light');
+INSERT INTO weight_category (name) values ('Welter');
+INSERT INTO weight_category (name) values ('Light Middle');
+INSERT INTO weight_category (name) values ('Middle');
+INSERT INTO weight_category (name) values ('Light Heavy');
+INSERT INTO weight_category (name) values ('Heavy');
+INSERT INTO weight_category (name) values ('-54');
+INSERT INTO weight_category (name) values ('-58');
+INSERT INTO weight_category (name) values ('-63');
+INSERT INTO weight_category (name) values ('-68');
+INSERT INTO weight_category (name) values ('-74');
+INSERT INTO weight_category (name) values ('-80');
+INSERT INTO weight_category (name) values ('-87');
+INSERT INTO weight_category (name) values ('+87');
+INSERT INTO weight_category (name) values ('-46');
+INSERT INTO weight_category (name) values ('-49');
+INSERT INTO weight_category (name) values ('-53');
+INSERT INTO weight_category (name) values ('-62');
+INSERT INTO weight_category (name) values ('-67');
+INSERT INTO weight_category (name) values ('-73');
+INSERT INTO weight_category (name) values ('+73');
+
+-- age_category --
+INSERT INTO age_category (name) values ('Infantil');
+INSERT INTO age_category (name) values ('Cadete');
+INSERT INTO age_category (name) values ('Junior');
+INSERT INTO age_category (name) values ('Senior');
+INSERT INTO age_category (name) values ('Ejecutivo');
+
+
+
